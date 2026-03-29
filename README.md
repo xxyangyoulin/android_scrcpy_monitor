@@ -59,4 +59,3 @@ adb install -r app/build/outputs/apk/debug/app-debug.apk
 ## Notes
 
 - The app is designed for rooted devices. Without root, session detection and disconnect behavior are limited by Android's permission model.
-- The current package name is `com.xxyangyoulin.scrcpymonitor`.

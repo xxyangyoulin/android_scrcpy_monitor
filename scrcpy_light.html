@@ -1,0 +1,184 @@
+
+<style>
+  .phone {
+    width: 300px;
+    background: #f9fafb;
+    border-radius: 44px;
+    overflow: hidden;
+    border: 6px solid #e5e7eb;
+    font-family: 'Google Sans', 'Roboto', sans-serif;
+  }
+  .inner { padding-bottom: 32px; }
+  .sbar { display:flex; justify-content:space-between; align-items:center; padding:14px 24px 4px; }
+  .stime { font-size:13px; font-weight:500; color:#374151; }
+  .sicons { display:flex; gap:6px; align-items:center; }
+  .topbar { display:flex; justify-content:space-between; align-items:center; padding:6px 18px 18px; }
+  .appname { font-size:20px; font-weight:400; color:#111827; }
+  .iconbtn { width:38px; height:38px; border-radius:50%; background:#f3f4f6; display:flex; align-items:center; justify-content:center; }
+
+  .hero { margin:0 14px 12px; border-radius:28px; padding:24px 20px 20px; border:1px solid; }
+  .hero.disconnected { background:#fff; border-color:#e5e7eb; }
+  .hero.connected { background:#f0fdf4; border-color:#bbf7d0; }
+
+  .status-pill { display:inline-flex; align-items:center; gap:5px; border-radius:20px; padding:4px 10px; margin-bottom:24px; }
+  .disconnected .status-pill { background:#f3f4f6; }
+  .connected .status-pill { background:#dcfce7; }
+  .pill-dot { width:6px; height:6px; border-radius:50%; }
+  .pill-text { font-size:11px; font-weight:500; }
+  .disconnected .pill-text { color:#6b7280; }
+  .connected .pill-text { color:#15803d; }
+
+  .center-icon { width:72px; height:72px; border-radius:24px; display:flex; align-items:center; justify-content:center; margin:0 auto 16px; }
+  .disconnected .center-icon { background:#f9fafb; border:1px solid #e5e7eb; }
+  .connected .center-icon { background:#dcfce7; border:1.5px solid #86efac; }
+
+  .hero-title { font-size:28px; font-weight:300; text-align:center; margin:0 0 6px; letter-spacing:-0.3px; }
+  .disconnected .hero-title { color:#9ca3af; }
+  .connected .hero-title { color:#15803d; }
+
+  .hero-sub { font-size:12px; text-align:center; margin:0 0 24px; }
+  .disconnected .hero-sub { color:#9ca3af; }
+  .connected .hero-sub { color:#16a34a; }
+
+  .info-row { display:flex; gap:8px; margin-bottom:16px; }
+  .info-chip { flex:1; border-radius:12px; padding:8px 10px; text-align:center; }
+  .disconnected .info-chip { background:#f9fafb; border:1px solid #e5e7eb; }
+  .connected .info-chip { background:#fff; border:1px solid #bbf7d0; }
+  .info-val { font-size:14px; font-weight:500; margin:0 0 2px; display:block; }
+  .disconnected .info-val { color:#9ca3af; }
+  .connected .info-val { color:#15803d; }
+  .info-lbl { font-size:10px; color:#9ca3af; display:block; }
+
+  .dis-btn { width:100%; border:none; border-radius:16px; padding:14px; font-size:14px; font-weight:500; cursor:pointer; }
+  .dis-btn.inactive { background:#f3f4f6; color:#9ca3af; }
+  .dis-btn.active { background:#fff1f2; border:1.5px solid #fca5a5; color:#dc2626; }
+
+  .opt-card { margin:0 14px 12px; background:#fff; border-radius:22px; border:1px solid #e5e7eb; overflow:hidden; }
+  .opt-head { padding:14px 16px 6px; font-size:11px; font-weight:500; color:#9ca3af; letter-spacing:0.5px; text-transform:uppercase; }
+  .opt-row { display:flex; align-items:center; justify-content:space-between; padding:11px 16px; border-top:1px solid #f3f4f6; }
+  .opt-left { display:flex; align-items:center; gap:10px; }
+  .opt-ico { width:30px; height:30px; border-radius:9px; background:#f3f4f6; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .opt-name { font-size:12px; color:#1f2937; margin:0 0 1px; }
+  .opt-sub { font-size:10px; color:#9ca3af; margin:0; }
+  .tog { width:40px; height:22px; border-radius:11px; background:#16a34a; position:relative; flex-shrink:0; }
+  .tog::after { content:''; width:16px; height:16px; background:#fff; border-radius:50%; position:absolute; right:3px; top:3px; }
+
+  .foot { display:flex; align-items:center; justify-content:center; gap:5px; padding:10px 0 0; }
+  .fdot { width:5px; height:5px; border-radius:50%; background:#16a34a; }
+  .ftxt { font-size:10px; color:#9ca3af; }
+</style>
+
+<div style="background:var(--color-background-secondary);border-radius:32px;padding:28px 16px;display:flex;justify-content:center;gap:28px;flex-wrap:wrap;align-items:flex-start;">
+
+  <div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+    <span style="font-size:12px;color:var(--color-text-secondary);">未连接</span>
+    <div class="phone">
+      <div class="inner">
+        <div class="sbar">
+          <span class="stime">15:22</span>
+          <div class="sicons">
+            <svg width="15" height="12" viewBox="0 0 15 12"><rect x="0" y="8" width="3" height="4" rx="0.5" fill="#9ca3af"/><rect x="4" y="5" width="3" height="7" rx="0.5" fill="#9ca3af"/><rect x="8" y="2" width="3" height="10" rx="0.5" fill="#9ca3af"/><rect x="12" y="0" width="3" height="12" rx="0.5" fill="#d1d5db"/></svg>
+            <svg width="16" height="12" viewBox="0 0 24 16" fill="none"><path d="M1 5s5-5 11-5 11 5 11 5" stroke="#9ca3af" stroke-width="2" stroke-linecap="round"/><path d="M5 9s3-3 7-3 7 3 7 3" stroke="#9ca3af" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="14" r="2" fill="#9ca3af"/></svg>
+            <svg width="22" height="12" viewBox="0 0 22 12" fill="none"><rect x="0.5" y="0.5" width="18" height="11" rx="2" stroke="#9ca3af"/><path d="M19 4h2v4h-2" stroke="#9ca3af" stroke-linecap="round"/><rect x="2.5" y="2.5" width="8" height="7" rx="1" fill="#9ca3af"/></svg>
+          </div>
+        </div>
+        <div class="topbar">
+          <span class="appname">scrcpy</span>
+          <div class="iconbtn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="5" r="1.5" fill="#6b7280"/><circle cx="12" cy="12" r="1.5" fill="#6b7280"/><circle cx="12" cy="19" r="1.5" fill="#6b7280"/></svg></div>
+        </div>
+        <div class="hero disconnected">
+          <div class="status-pill"><div class="pill-dot" style="background:#f59e0b;"></div><span class="pill-text">监控中</span></div>
+          <div class="center-icon">
+            <svg width="36" height="36" viewBox="0 0 36 36" fill="none"><rect x="7" y="2" width="14" height="22" rx="3" stroke="#d1d5db" stroke-width="1.5"/><circle cx="14" cy="21" r="1.5" fill="#d1d5db"/><rect x="21" y="14" width="12" height="16" rx="2" stroke="#d1d5db" stroke-width="1.5"/><circle cx="27" cy="27" r="1" fill="#d1d5db"/><path d="M14 10h5M14 14h3" stroke="#d1d5db" stroke-width="1.5" stroke-linecap="round"/><path d="M18 8l-2-2m0 0l-2 2m2-2v6" stroke="#9ca3af" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <p class="hero-title">无连接</p>
+          <p class="hero-sub">等待 scrcpy 发起连接…</p>
+          <div class="info-row">
+            <div class="info-chip"><span class="info-val">—</span><span class="info-lbl">IP 地址</span></div>
+            <div class="info-chip"><span class="info-val" style="color:#6b7280;">1 分钟前</span><span class="info-lbl">上次连接</span></div>
+          </div>
+          <button class="dis-btn inactive" disabled>暂无可断开连接</button>
+        </div>
+        <div class="opt-card">
+          <div class="opt-head">连接优化</div>
+          <div class="opt-row">
+            <div class="opt-left">
+              <div class="opt-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M1 6s4.5-4 11-4 11 4 11 4" stroke="#16a34a" stroke-width="2" stroke-linecap="round"/><path d="M5 10s3-2.5 7-2.5S19 10 19 10" stroke="#16a34a" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="15" r="2" fill="#16a34a"/></svg></div>
+              <div><p class="opt-name">WiFi 调试</p><p class="opt-sub">adb over TCP/IP</p></div>
+            </div>
+            <div class="tog"></div>
+          </div>
+          <div class="opt-row">
+            <div class="opt-left">
+              <div class="opt-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polygon points="5,3 19,12 5,21" stroke="#16a34a" stroke-width="2" stroke-linejoin="round" fill="none"/></svg></div>
+              <div><p class="opt-name">连接时关闭动画</p><p class="opt-sub">降低投屏延迟</p></div>
+            </div>
+            <div class="tog"></div>
+          </div>
+        </div>
+        <div class="foot"><div class="fdot"></div><span class="ftxt">root 权限已获取</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+    <span style="font-size:12px;color:var(--color-text-secondary);">已连接</span>
+    <div class="phone">
+      <div class="inner">
+        <div class="sbar">
+          <span class="stime">15:22</span>
+          <div class="sicons">
+            <svg width="15" height="12" viewBox="0 0 15 12"><rect x="0" y="8" width="3" height="4" rx="0.5" fill="#6b7280"/><rect x="4" y="5" width="3" height="7" rx="0.5" fill="#6b7280"/><rect x="8" y="2" width="3" height="10" rx="0.5" fill="#6b7280"/><rect x="12" y="0" width="3" height="12" rx="0.5" fill="#16a34a"/></svg>
+            <svg width="16" height="12" viewBox="0 0 24 16" fill="none"><path d="M1 5s5-5 11-5 11 5 11 5" stroke="#16a34a" stroke-width="2" stroke-linecap="round"/><path d="M5 9s3-3 7-3 7 3 7 3" stroke="#16a34a" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="14" r="2" fill="#16a34a"/></svg>
+            <svg width="22" height="12" viewBox="0 0 22 12" fill="none"><rect x="0.5" y="0.5" width="18" height="11" rx="2" stroke="#6b7280"/><path d="M19 4h2v4h-2" stroke="#6b7280" stroke-linecap="round"/><rect x="2.5" y="2.5" width="14" height="7" rx="1" fill="#16a34a"/></svg>
+          </div>
+        </div>
+        <div class="topbar">
+          <span class="appname">scrcpy</span>
+          <div class="iconbtn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="5" r="1.5" fill="#6b7280"/><circle cx="12" cy="12" r="1.5" fill="#6b7280"/><circle cx="12" cy="19" r="1.5" fill="#6b7280"/></svg></div>
+        </div>
+        <div class="hero connected">
+          <div class="status-pill"><div class="pill-dot" style="background:#16a34a;"></div><span class="pill-text">已连接</span></div>
+          <div class="center-icon">
+            <svg width="36" height="36" viewBox="0 0 36 36" fill="none"><rect x="7" y="2" width="14" height="22" rx="3" stroke="#16a34a" stroke-width="1.5"/><circle cx="14" cy="21" r="1.5" fill="#16a34a"/><rect x="21" y="14" width="12" height="16" rx="2" stroke="#16a34a" stroke-width="1.5"/><circle cx="27" cy="27" r="1" fill="#16a34a"/><path d="M14 10h5M14 14h5" stroke="#16a34a" stroke-width="1.5" stroke-linecap="round"/><path d="M10 16l2.5 2.5 5-5" stroke="#16a34a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <p class="hero-title">已连接</p>
+          <p class="hero-sub">投屏进行中</p>
+          <div class="info-row">
+            <div class="info-chip"><span class="info-val">192.168.10.12</span><span class="info-lbl">IP 地址</span></div>
+            <div class="info-chip">
+              <span class="info-val" id="dur">00:07:32</span>
+              <span class="info-lbl">已连接时长</span>
+            </div>
+          </div>
+          <button class="dis-btn active">断开连接</button>
+        </div>
+        <div class="opt-card">
+          <div class="opt-head">连接优化</div>
+          <div class="opt-row">
+            <div class="opt-left">
+              <div class="opt-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M1 6s4.5-4 11-4 11 4 11 4" stroke="#16a34a" stroke-width="2" stroke-linecap="round"/><path d="M5 10s3-2.5 7-2.5S19 10 19 10" stroke="#16a34a" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="15" r="2" fill="#16a34a"/></svg></div>
+              <div><p class="opt-name">WiFi 调试</p><p class="opt-sub">adb over TCP/IP</p></div>
+            </div>
+            <div class="tog"></div>
+          </div>
+          <div class="opt-row">
+            <div class="opt-left">
+              <div class="opt-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polygon points="5,3 19,12 5,21" stroke="#16a34a" stroke-width="2" stroke-linejoin="round" fill="none"/></svg></div>
+              <div><p class="opt-name">连接时关闭动画</p><p class="opt-sub">降低投屏延迟</p></div>
+            </div>
+            <div class="tog"></div>
+          </div>
+        </div>
+        <div class="foot"><div class="fdot"></div><span class="ftxt">root 权限已获取</span></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+<script>
+  let s = 452;
+  const el = document.getElementById('dur');
+  const fmt = n => { const h=Math.floor(n/3600),m=Math.floor((n%3600)/60),sc=n%60,p=x=>String(x).padStart(2,'0'); return h>0?`${p(h)}:${p(m)}:${p(sc)}`:`${p(m)}:${p(sc)}`; };
+  if(el){ el.textContent=fmt(s); setInterval(()=>{ s++; el.textContent=fmt(s); },1000); }
+</script>

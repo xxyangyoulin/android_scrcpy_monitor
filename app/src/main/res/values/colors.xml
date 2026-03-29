@@ -1,0 +1,33 @@
+<resources>
+    <color name="colorPrimary">#106F63</color>
+    <color name="colorPrimaryVariant">#0B594F</color>
+    <color name="colorOnPrimary">#FFFFFF</color>
+    <color name="colorSurface">#FFFFFF</color>
+    <color name="colorSurfaceVariant">#CFE7E1</color>
+    <color name="colorOnSurface">#12332E</color>
+    <color name="colorOnSurfaceVariant">#31544E</color>
+    <color name="statusConnected">#106F63</color>
+    <color name="statusDisconnected">#31544E</color>
+    <color name="statusMonitoringDot">#F59E0B</color>
+    <color name="buttonDanger">#7A1F1F</color>
+    <color name="heroButtonConnectedBackground">#FFF1F2</color>
+    <color name="heroButtonConnectedBorder">#FCA5A5</color>
+    <color name="heroButtonConnectedText">#DC2626</color>
+    <color name="heroButtonDisconnectedBackground">#F3F4F6</color>
+    <color name="heroButtonDisconnectedText">#9CA3AF</color>
+    <color name="heroConnectedBackground">#EFFBF3</color>
+    <color name="heroDisconnectedBackground">#FFFFFF</color>
+    <color name="heroConnectedBorder">#B9E8C7</color>
+    <color name="heroDisconnectedBorder">#DFE6E4</color>
+    <color name="pillConnectedBackground">#DCF6E5</color>
+    <color name="pillDisconnectedBackground">#EFF2F1</color>
+    <color name="iconConnectedBackground">#DCF6E5</color>
+    <color name="iconDisconnectedBackground">#F7F9F8</color>
+    <color name="infoChipConnectedBackground">#FFFFFF</color>
+    <color name="infoChipDisconnectedBackground">#F7F9F8</color>
+    <color name="infoLabelText">#9CA3AF</color>
+    <color name="settingsCardBackground">#FFFFFF</color>
+    <color name="settingsIconBackground">#EFF3F2</color>
+    <color name="settingsAccent">#2A7AEE</color>
+    <color name="footerDot">#16A34A</color>
+</resources>

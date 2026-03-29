@@ -163,11 +163,25 @@ fun MainScreen(
                     modifier = Modifier
                         .size(6.dp)
                         .clip(CircleShape)
-                        .background(colorResource(R.color.footerDot))
+                        .background(
+                            colorResource(
+                                if (uiState.rootAvailable) {
+                                    R.color.footerDot
+                                } else {
+                                    R.color.statusDisconnected
+                                }
+                            )
+                        )
                 )
                 Spacer(modifier = Modifier.width(6.dp))
                 Text(
-                    text = stringResource(R.string.status_root_ready),
+                    text = stringResource(
+                        if (uiState.rootAvailable) {
+                            R.string.status_root_ready
+                        } else {
+                            R.string.status_root_missing
+                        }
+                    ),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )

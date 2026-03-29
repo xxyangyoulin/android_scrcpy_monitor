@@ -47,6 +47,7 @@
     <string name="dialog_wifi_debugging_port_label">端口</string>
     <string name="summary_disable_animations">降低投屏延迟</string>
     <string name="status_root_ready">root 权限已获取</string>
+    <string name="status_root_missing">需要 root 权限</string>
     <string name="toast_started">后台监控已启动，开机后会自动恢复</string>
     <string name="toast_stopped">后台监控已关闭，开机后也不会自动启动</string>
     <string name="toast_open_settings_failed">无法打开开发者选项</string>

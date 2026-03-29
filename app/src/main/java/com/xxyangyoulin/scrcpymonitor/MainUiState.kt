@@ -15,5 +15,6 @@ data class MainUiState(
     val wifiDebuggingPort: String = "",
     val disableAnimationsEnabled: Boolean = true,
     val disconnectEnabled: Boolean = false,
+    val rootAvailable: Boolean = false,
     val disableAnimationsSubtitle: String = ""
 )

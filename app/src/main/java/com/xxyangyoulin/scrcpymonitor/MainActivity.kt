@@ -35,6 +35,7 @@ class MainActivity : ComponentActivity() {
     private var scrcpyStatus = ScrcpyStateDetector.Status.UNKNOWN
     private var wifiDebuggingPort = MonitorSettings.DEFAULT_WIFI_DEBUGGING_PORT
     private var lastWifiDebuggingRefreshAt = 0L
+    private var rootAvailable = false
     private var currentDisplayEndpoint: String? = null
     private var disconnectInProgress = false
     private var connectedAtMillis: Long? = null
@@ -111,6 +112,7 @@ class MainActivity : ComponentActivity() {
         ensureMonitorRunningIfEnabled()
         applyRuntimeState(MonitorRuntimeState.current())
         refreshConnectionState()
+        refreshRootAccessState()
         renderState()
         refreshWifiDebuggingState()
         renderAnimationToggle()
@@ -242,6 +244,16 @@ class MainActivity : ComponentActivity() {
             val port = WifiDebuggingManager.getPort()
             runOnUiThread {
                 renderWifiDebuggingState(status, port)
+            }
+        }
+    }
+
+    private fun refreshRootAccessState() {
+        runInBackground {
+            val available = RootShell.isAvailable()
+            runOnUiThread {
+                rootAvailable = available
+                renderState()
             }
         }
     }
@@ -400,7 +412,8 @@ class MainActivity : ComponentActivity() {
             infoSecondaryValue = secondaryValue,
             disconnectEnabled = connected && !disconnectInProgress,
             wifiDebuggingPort = wifiDebuggingPort.toString(),
-            disableAnimationsSubtitle = getString(R.string.summary_disable_animations)
+            disableAnimationsSubtitle = getString(R.string.summary_disable_animations),
+            rootAvailable = rootAvailable
         )
     }
 

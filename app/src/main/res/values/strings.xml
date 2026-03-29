@@ -47,6 +47,7 @@
     <string name="dialog_wifi_debugging_port_label">Port</string>
     <string name="summary_disable_animations">Reduce perceived mirroring latency</string>
     <string name="status_root_ready">root access ready</string>
+    <string name="status_root_missing">root access required</string>
     <string name="toast_started">Background monitor enabled and will restart after boot</string>
     <string name="toast_stopped">Background monitor disabled and will not restart after boot</string>
     <string name="toast_open_settings_failed">Unable to open Developer options</string>

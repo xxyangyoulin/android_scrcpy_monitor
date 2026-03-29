@@ -1,6 +1,10 @@
 package com.xxyangyoulin.scrcpymonitor
 
 object RootShell {
+    fun isAvailable(): Boolean {
+        return succeeded(run("id"))
+    }
+
     fun run(script: String): Result {
         return try {
             val process = Runtime.getRuntime().exec("su")

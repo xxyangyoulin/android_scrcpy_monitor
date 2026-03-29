@@ -41,14 +41,6 @@ The debug APK will be generated at:
 adb install -r app/build/outputs/apk/debug/app-debug.apk
 ```
 
-## GitHub Actions
-
-This repository includes a tag-triggered GitHub Actions workflow at `.github/workflows/tag-build.yml`.
-
-- Push any tag to trigger a build
-- The workflow runs `./gradlew assembleDebug`
-- The generated APK is uploaded as a workflow artifact named `ScrcpyMonitor-<tag>-debug-apk`
-
 ## Localization
 
 - Default resources live in `app/src/main/res/values/strings.xml`

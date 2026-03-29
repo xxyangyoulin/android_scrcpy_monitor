@@ -2,6 +2,8 @@
 
 Scrcpy Monitor is a small Android app for rooted devices that monitors `scrcpy` sessions on-device, keeps a foreground notification alive, and lets you manage a few connection-related actions directly from the phone.
 
+<img src="./screenshot.jpg" alt="Scrcpy Monitor screenshot" width="320" />
+
 ## Features
 
 - Detects active `scrcpy` sessions on-device

@@ -16,6 +16,7 @@
     <string name="action_enable_wifi_debugging">开启 WiFi 调试</string>
     <string name="action_disable_wifi_debugging">关闭 WiFi 调试</string>
     <string name="title_wifi_debugging">WiFi 调试</string>
+    <string name="title_wifi_access_limit">限制 WiFi 访问</string>
     <string name="title_disable_animations">连接时关闭 Android 动画</string>
     <string name="monitor_enabled">后台开启</string>
     <string name="monitor_running">监控中</string>
@@ -45,6 +46,10 @@
     <string name="label_wifi_debugging_port">端口 %1$s</string>
     <string name="dialog_wifi_debugging_port_title">修改 WiFi 调试端口</string>
     <string name="dialog_wifi_debugging_port_label">端口</string>
+    <string name="label_wifi_access_limit_ip">允许 %1$s</string>
+    <string name="dialog_wifi_access_limit_ip_title">允许的 WiFi IP</string>
+    <string name="dialog_wifi_access_limit_ip_label">IPv4 地址</string>
+    <string name="summary_wifi_access_limit">只允许一个 IP 通过 WiFi 连接</string>
     <string name="summary_disable_animations">降低投屏延迟</string>
     <string name="status_root_ready">root 权限已获取</string>
     <string name="status_root_missing">需要 root 权限</string>
@@ -58,5 +63,9 @@
     <string name="toast_wifi_debugging_failed">切换 WiFi 调试失败，请检查 root 授权</string>
     <string name="toast_wifi_debugging_port_invalid">端口无效，请输入 1 到 65535</string>
     <string name="toast_wifi_debugging_port_updated">WiFi 调试端口已更新</string>
+    <string name="toast_wifi_access_limit_ip_invalid">IPv4 地址无效</string>
+    <string name="toast_wifi_access_limit_updated">WiFi 访问限制已更新</string>
+    <string name="toast_wifi_access_limit_failed">应用 WiFi 访问限制失败</string>
+    <string name="value_not_set">未设置</string>
     <string name="hint_root_required">本应用需要 root 权限</string>
 </resources>

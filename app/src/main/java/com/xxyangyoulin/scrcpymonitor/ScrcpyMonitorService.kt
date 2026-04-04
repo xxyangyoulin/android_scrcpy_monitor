@@ -21,6 +21,7 @@ class ScrcpyMonitorService : Service() {
     private var uiActive = false
     private var lastSnapshot: ScrcpyStateDetector.Snapshot? = null
     private var idlePollCount = 0
+    private var lastWifiAccessControlSyncAt = 0L
     private val pollRunnable = object : Runnable {
         override fun run() {
             var status = ScrcpyStateDetector.Status.UNKNOWN
@@ -79,6 +80,7 @@ class ScrcpyMonitorService : Service() {
         val manager = getSystemService(NotificationManager::class.java)
         val snapshot = ScrcpyStateDetector.getSnapshot()
         val previousSnapshot = lastSnapshot
+        maybeSyncWifiAccessControl(forceRefresh)
         syncAnimationState(snapshot.status)
         storeLastConnection(snapshot, previousSnapshot)
         updateIdlePollCount(snapshot.status, previousSnapshot?.status)
@@ -90,6 +92,20 @@ class ScrcpyMonitorService : Service() {
             lastSnapshot = snapshot
         }
         return snapshot.status
+    }
+
+    private fun maybeSyncWifiAccessControl(forceRefresh: Boolean) {
+        val now = System.currentTimeMillis()
+        if (!forceRefresh && now - lastWifiAccessControlSyncAt < WIFI_ACCESS_CONTROL_SYNC_INTERVAL_MS) {
+            return
+        }
+        val wifiStatus = WifiDebuggingManager.getStatus(forceRefresh = true)
+        WifiAccessControlManager.sync(
+            this,
+            wifiStatus == WifiDebuggingManager.Status.ENABLED,
+            WifiDebuggingManager.getPort()
+        )
+        lastWifiAccessControlSyncAt = now
     }
 
     private fun storeLastConnection(
@@ -216,6 +232,7 @@ class ScrcpyMonitorService : Service() {
         private const val RECENT_IDLE_POLL_INTERVAL_MS = 5_000L
         private const val IDLE_POLL_INTERVAL_MS = 15_000L
         private const val IDLE_POLL_FAST_WINDOW_COUNT = 6
+        private const val WIFI_ACCESS_CONTROL_SYNC_INTERVAL_MS = 30_000L
 
         @Volatile
         var isRunning: Boolean = false

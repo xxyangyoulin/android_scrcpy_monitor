@@ -68,6 +68,8 @@ fun MainScreen(
     onDisconnect: () -> Unit,
     onWifiDebuggingChange: (Boolean) -> Unit,
     onWifiDebuggingPortChange: (String) -> Unit,
+    onWifiAccessLimitChange: (Boolean) -> Unit,
+    onWifiAccessLimitIpChange: (String) -> Unit,
     onDisableAnimationsChange: (Boolean) -> Unit
 ) {
     var menuExpanded by remember { mutableStateOf(false) }
@@ -201,6 +203,8 @@ fun MainScreen(
                 uiState = uiState,
                 onWifiDebuggingChange = onWifiDebuggingChange,
                 onWifiDebuggingPortChange = onWifiDebuggingPortChange,
+                onWifiAccessLimitChange = onWifiAccessLimitChange,
+                onWifiAccessLimitIpChange = onWifiAccessLimitIpChange,
                 onDisableAnimationsChange = onDisableAnimationsChange
             )
         }
@@ -452,6 +456,8 @@ private fun ToolsCard(
     uiState: MainUiState,
     onWifiDebuggingChange: (Boolean) -> Unit,
     onWifiDebuggingPortChange: (String) -> Unit,
+    onWifiAccessLimitChange: (Boolean) -> Unit,
+    onWifiAccessLimitIpChange: (String) -> Unit,
     onDisableAnimationsChange: (Boolean) -> Unit
 ) {
     Card(
@@ -466,21 +472,41 @@ private fun ToolsCard(
                 iconRes = R.drawable.ic_wifi_debug,
                 title = stringResource(R.string.title_wifi_debugging),
                 subtitle = "",
-                port = uiState.wifiDebuggingPort,
+                detailText = stringResource(R.string.label_wifi_debugging_port, uiState.wifiDebuggingPort),
                 checked = uiState.wifiDebuggingEnabled,
                 enabled = uiState.wifiDebuggingSwitchEnabled,
-                onPortChange = onWifiDebuggingPortChange,
+                detailDialogTitle = stringResource(R.string.dialog_wifi_debugging_port_title),
+                detailDialogLabel = stringResource(R.string.dialog_wifi_debugging_port_label),
+                detailKeyboardType = KeyboardType.Number,
+                onDetailChange = onWifiDebuggingPortChange,
                 onCheckedChange = onWifiDebuggingChange
+            )
+            DividerSpacer()
+            SettingRow(
+                iconRes = R.drawable.ic_wifi_debug,
+                title = stringResource(R.string.title_wifi_access_limit),
+                subtitle = stringResource(R.string.summary_wifi_access_limit),
+                detailText = stringResource(R.string.label_wifi_access_limit_ip, uiState.wifiAccessLimitIp),
+                checked = uiState.wifiAccessLimitEnabled,
+                enabled = true,
+                detailDialogTitle = stringResource(R.string.dialog_wifi_access_limit_ip_title),
+                detailDialogLabel = stringResource(R.string.dialog_wifi_access_limit_ip_label),
+                detailKeyboardType = KeyboardType.Uri,
+                onDetailChange = onWifiAccessLimitIpChange,
+                onCheckedChange = onWifiAccessLimitChange
             )
             DividerSpacer()
             SettingRow(
                 iconRes = R.drawable.ic_latency_reduce,
                 title = stringResource(R.string.title_disable_animations),
                 subtitle = uiState.disableAnimationsSubtitle,
-                port = null,
+                detailText = null,
                 checked = uiState.disableAnimationsEnabled,
                 enabled = true,
-                onPortChange = null,
+                detailDialogTitle = null,
+                detailDialogLabel = null,
+                detailKeyboardType = KeyboardType.Text,
+                onDetailChange = null,
                 onCheckedChange = onDisableAnimationsChange
             )
         }
@@ -503,15 +529,18 @@ private fun SettingRow(
     iconRes: Int,
     title: String,
     subtitle: String,
-    port: String?,
+    detailText: String?,
     checked: Boolean,
     enabled: Boolean,
-    onPortChange: ((String) -> Unit)?,
+    detailDialogTitle: String?,
+    detailDialogLabel: String?,
+    detailKeyboardType: KeyboardType,
+    onDetailChange: ((String) -> Unit)?,
     onCheckedChange: (Boolean) -> Unit
 ) {
     val primaryColor = MaterialTheme.colorScheme.primary
     var portDialogVisible by remember { mutableStateOf(false) }
-    var portInput by remember(port) { mutableStateOf(port.orEmpty()) }
+    var detailInput by remember(detailText) { mutableStateOf(detailText.orEmpty()) }
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -547,16 +576,16 @@ private fun SettingRow(
                     modifier = Modifier.padding(top = 1.dp)
                 )
             }
-            if (port != null && onPortChange != null) {
+            if (detailText != null && onDetailChange != null) {
                 Text(
-                    text = stringResource(R.string.label_wifi_debugging_port, port),
+                    text = detailText,
                     style = MaterialTheme.typography.labelSmall,
                     color = primaryColor,
                     modifier = Modifier
                         .padding(top = if (subtitle.isNotBlank()) 6.dp else 4.dp)
                         .clip(RoundedCornerShape(8.dp))
                         .clickable {
-                            portInput = port
+                            detailInput = detailText
                             portDialogVisible = true
                         }
                         .padding(horizontal = 8.dp, vertical = 4.dp)
@@ -575,26 +604,31 @@ private fun SettingRow(
             )
         )
     }
-    if (portDialogVisible && onPortChange != null) {
+    if (portDialogVisible && onDetailChange != null) {
         AlertDialog(
             onDismissRequest = { portDialogVisible = false },
-            title = { Text(stringResource(R.string.dialog_wifi_debugging_port_title)) },
+            title = { Text(detailDialogTitle.orEmpty()) },
             text = {
                 OutlinedTextField(
-                    value = portInput,
+                    value = detailInput,
                     onValueChange = { value ->
-                        portInput = value.filter { it.isDigit() }.take(5)
+                        detailInput =
+                            if (detailKeyboardType == KeyboardType.Number) {
+                                value.filter { it.isDigit() }.take(5)
+                            } else {
+                                value.filter { it.isDigit() || it == '.' }.take(15)
+                            }
                     },
                     singleLine = true,
-                    label = { Text(stringResource(R.string.dialog_wifi_debugging_port_label)) },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                    label = { Text(detailDialogLabel.orEmpty()) },
+                    keyboardOptions = KeyboardOptions(keyboardType = detailKeyboardType)
                 )
             },
             confirmButton = {
                 TextButton(
                     onClick = {
                         portDialogVisible = false
-                        onPortChange(portInput)
+                        onDetailChange(detailInput)
                     }
                 ) {
                     Text(stringResource(android.R.string.ok))

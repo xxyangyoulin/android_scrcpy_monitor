@@ -97,6 +97,8 @@ class MainActivity : ComponentActivity() {
                         }
                     },
                     onWifiDebuggingPortChange = ::setWifiDebuggingPort,
+                    onWifiAccessLimitChange = ::setWifiAccessLimitEnabled,
+                    onWifiAccessLimitIpChange = ::setWifiAccessLimitIp,
                     onDisableAnimationsChange = { enabled ->
                         if (!ignoreAnimationSwitchChanges) {
                             setDisableAnimationsEnabled(enabled)
@@ -242,6 +244,11 @@ class MainActivity : ComponentActivity() {
         runInBackground {
             val status = WifiDebuggingManager.getStatus(forceRefresh = true)
             val port = WifiDebuggingManager.getPort()
+            WifiAccessControlManager.sync(
+                this,
+                status == WifiDebuggingManager.Status.ENABLED,
+                port
+            )
             runOnUiThread {
                 renderWifiDebuggingState(status, port)
             }
@@ -264,6 +271,11 @@ class MainActivity : ComponentActivity() {
             val success = WifiDebuggingManager.setEnabled(this, enabled)
             val status = WifiDebuggingManager.getStatus(forceRefresh = true)
             val port = WifiDebuggingManager.getPort()
+            WifiAccessControlManager.sync(
+                this,
+                status == WifiDebuggingManager.Status.ENABLED,
+                port
+            )
             runOnUiThread {
                 renderWifiDebuggingState(status, port)
                 renderWifiDebuggingSwitchEnabled(true)
@@ -328,12 +340,66 @@ class MainActivity : ComponentActivity() {
                 }
             val status = WifiDebuggingManager.getStatus(forceRefresh = true)
             val currentPort = WifiDebuggingManager.getPort()
+            val accessControlSynced =
+                WifiAccessControlManager.sync(
+                    this,
+                    status == WifiDebuggingManager.Status.ENABLED,
+                    currentPort
+                )
             runOnUiThread {
                 renderWifiDebuggingState(status, currentPort)
-                if (success) {
+                if (success && accessControlSynced) {
                     showToast(R.string.toast_wifi_debugging_port_updated)
                 } else {
                     showToast(R.string.toast_wifi_debugging_failed)
+                }
+            }
+        }
+    }
+
+    private fun setWifiAccessLimitEnabled(enabled: Boolean) {
+        if (enabled && !WifiAccessControlManager.isValidIpv4(MonitorSettings.getWifiAccessLimitIp(this))) {
+            showToast(R.string.toast_wifi_access_limit_ip_invalid)
+            renderState()
+            return
+        }
+        MonitorSettings.setWifiAccessLimitEnabled(this, enabled)
+        renderState()
+        runInBackground {
+            val synced =
+                WifiAccessControlManager.sync(
+                    this,
+                    uiState.wifiDebuggingEnabled,
+                    wifiDebuggingPort
+                )
+            runOnUiThread {
+                if (!synced) {
+                    showToast(R.string.toast_wifi_access_limit_failed)
+                }
+            }
+        }
+    }
+
+    private fun setWifiAccessLimitIp(ipText: String) {
+        val ip = ipText.trim()
+        if (!WifiAccessControlManager.isValidIpv4(ip)) {
+            showToast(R.string.toast_wifi_access_limit_ip_invalid)
+            return
+        }
+        MonitorSettings.setWifiAccessLimitIp(this, ip)
+        renderState()
+        runInBackground {
+            val synced =
+                WifiAccessControlManager.sync(
+                    this,
+                    uiState.wifiDebuggingEnabled,
+                    wifiDebuggingPort
+                )
+            runOnUiThread {
+                if (synced) {
+                    showToast(R.string.toast_wifi_access_limit_updated)
+                } else {
+                    showToast(R.string.toast_wifi_access_limit_failed)
                 }
             }
         }
@@ -412,6 +478,9 @@ class MainActivity : ComponentActivity() {
             infoSecondaryValue = secondaryValue,
             disconnectEnabled = connected && !disconnectInProgress,
             wifiDebuggingPort = wifiDebuggingPort.toString(),
+            wifiAccessLimitEnabled = MonitorSettings.isWifiAccessLimitEnabled(this),
+            wifiAccessLimitIp =
+                MonitorSettings.getWifiAccessLimitIp(this) ?: getString(R.string.value_not_set),
             disableAnimationsSubtitle = getString(R.string.summary_disable_animations),
             rootAvailable = rootAvailable
         )

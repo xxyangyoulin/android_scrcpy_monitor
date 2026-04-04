@@ -43,21 +43,6 @@ The debug APK will be generated at:
 adb install -r app/build/outputs/apk/debug/app-debug.apk
 ```
 
-## Localization
-
-- Default resources live in `app/src/main/res/values/strings.xml`
-- Simplified Chinese resources live in `app/src/main/res/values-zh-rCN/strings.xml`
-
-## Project Structure
-
-- `app/src/main/java/com/xxyangyoulin/scrcpymonitor/MainActivity.kt`: activity and UI state mapping
-- `app/src/main/java/com/xxyangyoulin/scrcpymonitor/MainScreen.kt`: Compose home screen
-- `app/src/main/java/com/xxyangyoulin/scrcpymonitor/ScrcpyMonitorService.kt`: foreground monitor service
-- `app/src/main/java/com/xxyangyoulin/scrcpymonitor/ScrcpyStateDetector.kt`: scrcpy detection
-- `app/src/main/java/com/xxyangyoulin/scrcpymonitor/RootDisconnect.kt`: disconnect command execution
-- `app/src/main/java/com/xxyangyoulin/scrcpymonitor/WifiDebuggingManager.kt`: Wi-Fi debugging status, port detection, and toggle
-- `app/src/main/java/com/xxyangyoulin/scrcpymonitor/MonitorSettings.kt`: persisted app settings
-
 ## Notes
 
 - The app is designed for rooted devices. Without root, session detection and disconnect behavior are limited by Android's permission model.

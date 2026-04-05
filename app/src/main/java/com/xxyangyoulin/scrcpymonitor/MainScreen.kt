@@ -69,6 +69,7 @@ fun MainScreen(
     onWifiDebuggingChange: (Boolean) -> Unit,
     onWifiDebuggingPortChange: (String) -> Unit,
     onStayAwakeChange: (Boolean) -> Unit,
+    onScreenOnChange: (Boolean) -> Unit,
     onWifiAccessLimitChange: (Boolean) -> Unit,
     onWifiAccessLimitIpChange: (String) -> Unit,
     onDisableAnimationsChange: (Boolean) -> Unit
@@ -205,6 +206,7 @@ fun MainScreen(
                 onWifiDebuggingChange = onWifiDebuggingChange,
                 onWifiDebuggingPortChange = onWifiDebuggingPortChange,
                 onStayAwakeChange = onStayAwakeChange,
+                onScreenOnChange = onScreenOnChange,
                 onWifiAccessLimitChange = onWifiAccessLimitChange,
                 onWifiAccessLimitIpChange = onWifiAccessLimitIpChange,
                 onDisableAnimationsChange = onDisableAnimationsChange
@@ -459,6 +461,7 @@ private fun ToolsCard(
     onWifiDebuggingChange: (Boolean) -> Unit,
     onWifiDebuggingPortChange: (String) -> Unit,
     onStayAwakeChange: (Boolean) -> Unit,
+    onScreenOnChange: (Boolean) -> Unit,
     onWifiAccessLimitChange: (Boolean) -> Unit,
     onWifiAccessLimitIpChange: (String) -> Unit,
     onDisableAnimationsChange: (Boolean) -> Unit
@@ -497,6 +500,20 @@ private fun ToolsCard(
                 detailKeyboardType = KeyboardType.Text,
                 onDetailChange = null,
                 onCheckedChange = onStayAwakeChange
+            )
+            DividerSpacer()
+            SettingRow(
+                iconRes = R.drawable.ic_stay_awake,
+                title = stringResource(R.string.title_screen_on),
+                subtitle = stringResource(R.string.summary_screen_on),
+                detailText = null,
+                checked = uiState.screenOnEnabled,
+                enabled = true,
+                detailDialogTitle = null,
+                detailDialogLabel = null,
+                detailKeyboardType = KeyboardType.Text,
+                onDetailChange = null,
+                onCheckedChange = onScreenOnChange
             )
             DividerSpacer()
             SettingRow(

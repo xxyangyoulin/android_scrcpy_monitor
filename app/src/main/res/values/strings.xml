@@ -51,7 +51,9 @@
     <string name="dialog_wifi_access_limit_ip_title">Allowed Wi-Fi IP</string>
     <string name="dialog_wifi_access_limit_ip_label">IPv4 address</string>
     <string name="summary_wifi_access_limit">Only allow one IP to connect over Wi-Fi</string>
+    <string name="title_screen_on">Keep screen on</string>
     <string name="summary_stay_awake">Keep screen on when charging</string>
+    <string name="summary_screen_on">Prevent screen from turning off</string>
     <string name="summary_disable_animations">Reduce perceived mirroring latency</string>
     <string name="status_root_ready">root access ready</string>
     <string name="status_root_missing">root access required</string>
@@ -71,6 +73,9 @@
     <string name="toast_stay_awake_enabled">Stay awake while charging enabled</string>
     <string name="toast_stay_awake_disabled">Stay awake while charging disabled</string>
     <string name="toast_stay_awake_failed">Unable to change stay awake setting</string>
+    <string name="toast_screen_on_enabled">Screen will stay on</string>
+    <string name="toast_screen_on_disabled">Screen timeout restored</string>
+    <string name="toast_screen_on_failed">Unable to change screen timeout</string>
     <string name="value_not_set">Not set</string>
     <string name="hint_root_required">This app requires root access.</string>
 </resources>

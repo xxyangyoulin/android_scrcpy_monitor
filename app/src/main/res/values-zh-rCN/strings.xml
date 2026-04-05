@@ -51,7 +51,9 @@
     <string name="dialog_wifi_access_limit_ip_title">允许的 WiFi IP</string>
     <string name="dialog_wifi_access_limit_ip_label">IPv4 地址</string>
     <string name="summary_wifi_access_limit">只允许一个 IP 通过 WiFi 连接</string>
+    <string name="title_screen_on">保持屏幕常亮</string>
     <string name="summary_stay_awake">充电时保持屏幕常亮</string>
+    <string name="summary_screen_on">防止屏幕自动关闭</string>
     <string name="summary_disable_animations">降低投屏延迟</string>
     <string name="status_root_ready">root 权限已获取</string>
     <string name="status_root_missing">需要 root 权限</string>
@@ -71,6 +73,9 @@
     <string name="toast_stay_awake_enabled">已开启充电不熄屏</string>
     <string name="toast_stay_awake_disabled">已关闭充电不熄屏</string>
     <string name="toast_stay_awake_failed">切换充电不熄屏失败</string>
+    <string name="toast_screen_on_enabled">已开启屏幕常亮</string>
+    <string name="toast_screen_on_disabled">已恢复屏幕超时</string>
+    <string name="toast_screen_on_failed">切换屏幕常亮失败</string>
     <string name="value_not_set">未设置</string>
     <string name="hint_root_required">本应用需要 root 权限</string>
 </resources>

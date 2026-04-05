@@ -35,6 +35,7 @@ class MainActivity : ComponentActivity() {
     private var scrcpyStatus = ScrcpyStateDetector.Status.UNKNOWN
     private var wifiDebuggingPort = MonitorSettings.DEFAULT_WIFI_DEBUGGING_PORT
     private var lastWifiDebuggingRefreshAt = 0L
+    private var stayAwakeEnabled = false
     private var rootAvailable = false
     private var currentDisplayEndpoint: String? = null
     private var disconnectInProgress = false
@@ -97,6 +98,7 @@ class MainActivity : ComponentActivity() {
                         }
                     },
                     onWifiDebuggingPortChange = ::setWifiDebuggingPort,
+                    onStayAwakeChange = ::setStayAwakeEnabled,
                     onWifiAccessLimitChange = ::setWifiAccessLimitEnabled,
                     onWifiAccessLimitIpChange = ::setWifiAccessLimitIp,
                     onDisableAnimationsChange = { enabled ->
@@ -117,6 +119,7 @@ class MainActivity : ComponentActivity() {
         refreshRootAccessState()
         renderState()
         refreshWifiDebuggingState()
+        refreshStayAwakeState()
         renderAnimationToggle()
     }
 
@@ -265,6 +268,18 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    private fun refreshStayAwakeState() {
+        runInBackground {
+            val enabled = StayAwakeManager.isEnabled()
+            runOnUiThread {
+                if (enabled != null) {
+                    stayAwakeEnabled = enabled
+                    renderState()
+                }
+            }
+        }
+    }
+
     private fun setWifiDebuggingEnabled(enabled: Boolean) {
         renderWifiDebuggingSwitchEnabled(false)
         runInBackground {
@@ -405,6 +420,29 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    private fun setStayAwakeEnabled(enabled: Boolean) {
+        runInBackground {
+            val success = StayAwakeManager.setEnabled(enabled)
+            val current = StayAwakeManager.isEnabled()
+            runOnUiThread {
+                if (success && current != null) {
+                    stayAwakeEnabled = current
+                    renderState()
+                    showToast(
+                        if (current) {
+                            R.string.toast_stay_awake_enabled
+                        } else {
+                            R.string.toast_stay_awake_disabled
+                        }
+                    )
+                } else {
+                    showToast(R.string.toast_stay_awake_failed)
+                    refreshStayAwakeState()
+                }
+            }
+        }
+    }
+
     private fun syncAnimationPreference(disableAnimations: Boolean) {
         if (disableAnimations && scrcpyStatus != ScrcpyStateDetector.Status.CONNECTED) {
             return
@@ -478,6 +516,7 @@ class MainActivity : ComponentActivity() {
             infoSecondaryValue = secondaryValue,
             disconnectEnabled = connected && !disconnectInProgress,
             wifiDebuggingPort = wifiDebuggingPort.toString(),
+            stayAwakeEnabled = stayAwakeEnabled,
             wifiAccessLimitEnabled = MonitorSettings.isWifiAccessLimitEnabled(this),
             wifiAccessLimitIp =
                 MonitorSettings.getWifiAccessLimitIp(this) ?: getString(R.string.value_not_set),

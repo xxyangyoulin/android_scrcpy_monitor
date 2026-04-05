@@ -13,6 +13,7 @@ data class MainUiState(
     val wifiDebuggingEnabled: Boolean = false,
     val wifiDebuggingSwitchEnabled: Boolean = true,
     val wifiDebuggingPort: String = "",
+    val stayAwakeEnabled: Boolean = false,
     val wifiAccessLimitEnabled: Boolean = false,
     val wifiAccessLimitIp: String = "",
     val disableAnimationsEnabled: Boolean = true,

@@ -16,6 +16,7 @@
     <string name="action_enable_wifi_debugging">Enable Wi-Fi debugging</string>
     <string name="action_disable_wifi_debugging">Disable Wi-Fi debugging</string>
     <string name="title_wifi_debugging">Wi-Fi debugging</string>
+    <string name="title_stay_awake">Stay awake while charging</string>
     <string name="title_wifi_access_limit">Limit Wi-Fi access</string>
     <string name="title_disable_animations">Disable Android animations while connected</string>
     <string name="monitor_enabled">Background on</string>
@@ -50,6 +51,7 @@
     <string name="dialog_wifi_access_limit_ip_title">Allowed Wi-Fi IP</string>
     <string name="dialog_wifi_access_limit_ip_label">IPv4 address</string>
     <string name="summary_wifi_access_limit">Only allow one IP to connect over Wi-Fi</string>
+    <string name="summary_stay_awake">Keep screen on when charging</string>
     <string name="summary_disable_animations">Reduce perceived mirroring latency</string>
     <string name="status_root_ready">root access ready</string>
     <string name="status_root_missing">root access required</string>
@@ -66,6 +68,9 @@
     <string name="toast_wifi_access_limit_ip_invalid">Invalid IPv4 address.</string>
     <string name="toast_wifi_access_limit_updated">Wi-Fi access limit updated</string>
     <string name="toast_wifi_access_limit_failed">Unable to apply Wi-Fi access limit</string>
+    <string name="toast_stay_awake_enabled">Stay awake while charging enabled</string>
+    <string name="toast_stay_awake_disabled">Stay awake while charging disabled</string>
+    <string name="toast_stay_awake_failed">Unable to change stay awake setting</string>
     <string name="value_not_set">Not set</string>
     <string name="hint_root_required">This app requires root access.</string>
 </resources>

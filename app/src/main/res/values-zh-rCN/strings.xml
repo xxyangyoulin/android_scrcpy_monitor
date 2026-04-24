@@ -44,6 +44,15 @@
     <string name="info_label_connected_duration">已连接时长</string>
     <string name="info_label_last_connection">上次连接</string>
     <string name="info_value_unavailable">—</string>
+    <string name="info_label_connection_type">来源</string>
+    <string name="connection_type_usb">USB</string>
+    <string name="info_label_battery_temp">温度</string>
+    <string name="info_value_battery_temp">%1$.0f\u00B0C</string>
+    <string name="info_label_charging">供电</string>
+    <string name="charging_status_charging">充电中</string>
+    <string name="charging_status_discharging">使用电池</string>
+    <string name="charging_status_full">已充满</string>
+    <string name="charging_status_not_charging">未充电</string>
     <string name="label_wifi_debugging_port">端口 %1$s</string>
     <string name="dialog_wifi_debugging_port_title">修改 WiFi 调试端口</string>
     <string name="dialog_wifi_debugging_port_label">端口</string>
@@ -77,5 +86,6 @@
     <string name="toast_screen_on_disabled">已恢复屏幕超时</string>
     <string name="toast_screen_on_failed">切换屏幕常亮失败</string>
     <string name="value_not_set">未设置</string>
+    <string name="toast_ip_copied">已复制 %1$s</string>
     <string name="hint_root_required">本应用需要 root 权限</string>
 </resources>

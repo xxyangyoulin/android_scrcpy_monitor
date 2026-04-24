@@ -308,6 +308,37 @@ private fun HeroCard(
                     modifier = Modifier.weight(1f)
                 )
             }
+            if (connected && (uiState.batteryTemperature.isNotEmpty() || uiState.chargingStatus.isNotEmpty())) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 8.dp),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    if (uiState.batteryTemperature.isNotEmpty()) {
+                        Text(
+                            text = uiState.batteryTemperature,
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
+                        )
+                    }
+                    if (uiState.batteryTemperature.isNotEmpty() && uiState.chargingStatus.isNotEmpty()) {
+                        Text(
+                            text = "·",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
+                        )
+                    }
+                    if (uiState.chargingStatus.isNotEmpty()) {
+                        Text(
+                            text = uiState.chargingStatus,
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
+                        )
+                    }
+                }
+            }
             Button(
                 onClick = onDisconnect,
                 enabled = uiState.disconnectEnabled,

@@ -8,6 +8,7 @@ import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.net.wifi.WifiManager
+import android.os.BatteryManager
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -544,10 +545,10 @@ class MainActivity : ComponentActivity() {
             connectionStatusText = getConnectionStatusText(monitoringEnabled),
             connectionSubtitleText = getConnectionSubtitleText(connected),
             connected = connected,
-            infoPrimaryLabel = getString(R.string.info_label_source),
+            infoPrimaryLabel = getString(R.string.info_label_connection_type),
             infoPrimaryValue =
                 if (connected) {
-                    currentDisplayEndpoint ?: getString(R.string.info_value_unavailable)
+                    currentDisplayEndpoint ?: getString(R.string.connection_type_usb)
                 } else {
                     getString(R.string.info_value_unavailable)
                 },
@@ -563,7 +564,9 @@ class MainActivity : ComponentActivity() {
             disableAnimationsSubtitle = getString(R.string.summary_disable_animations),
             rootAvailable = rootAvailable,
             wifiIpv4 = getWifiIpv4(),
-            wifiIpv6 = getWifiIpv6()
+            wifiIpv6 = getWifiIpv6(),
+            batteryTemperature = if (connected) getBatteryTemperature() else "",
+            chargingStatus = if (connected) getChargingStatus() else ""
         )
     }
 
@@ -699,6 +702,28 @@ class MainActivity : ComponentActivity() {
             }
         } catch (_: Exception) {}
         return ""
+    }
+
+    private fun getBatteryTemperature(): String {
+        val intent = registerReceiver(null, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
+            ?: return getString(R.string.info_value_unavailable)
+        val tempTenths = intent.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, -1)
+        if (tempTenths < 0) return getString(R.string.info_value_unavailable)
+        return getString(R.string.info_value_battery_temp, tempTenths / 10f)
+    }
+
+    private fun getChargingStatus(): String {
+        val intent = registerReceiver(null, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
+            ?: return getString(R.string.info_value_unavailable)
+        val status = intent.getIntExtra(BatteryManager.EXTRA_STATUS, -1)
+        val resId = when (status) {
+            BatteryManager.BATTERY_STATUS_CHARGING -> R.string.charging_status_charging
+            BatteryManager.BATTERY_STATUS_DISCHARGING -> R.string.charging_status_discharging
+            BatteryManager.BATTERY_STATUS_FULL -> R.string.charging_status_full
+            BatteryManager.BATTERY_STATUS_NOT_CHARGING -> R.string.charging_status_not_charging
+            else -> return getString(R.string.info_value_unavailable)
+        }
+        return getString(resId)
     }
 
     companion object {

@@ -22,5 +22,7 @@ data class MainUiState(
     val rootAvailable: Boolean = false,
     val disableAnimationsSubtitle: String = "",
     val wifiIpv4: String = "",
-    val wifiIpv6: String = ""
+    val wifiIpv6: String = "",
+    val batteryTemperature: String = "",
+    val chargingStatus: String = ""
 )

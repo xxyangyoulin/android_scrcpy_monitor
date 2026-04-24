@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.content.res.Configuration
+import android.net.wifi.WifiManager
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -560,7 +561,9 @@ class MainActivity : ComponentActivity() {
             wifiAccessLimitIp =
                 MonitorSettings.getWifiAccessLimitIp(this) ?: getString(R.string.value_not_set),
             disableAnimationsSubtitle = getString(R.string.summary_disable_animations),
-            rootAvailable = rootAvailable
+            rootAvailable = rootAvailable,
+            wifiIpv4 = getWifiIpv4(),
+            wifiIpv6 = getWifiIpv6()
         )
     }
 
@@ -663,6 +666,39 @@ class MainActivity : ComponentActivity() {
 
     private fun runInBackground(action: () -> Unit) {
         Thread(action).start()
+    }
+
+    @Suppress("DEPRECATION")
+    private fun getWifiIpv4(): String {
+        return try {
+            val wifiManager = applicationContext.getSystemService(Context.WIFI_SERVICE) as? WifiManager
+            val ip = wifiManager?.connectionInfo?.ipAddress ?: return ""
+            if (ip == 0) return ""
+            String.format(
+                "%d.%d.%d.%d",
+                ip and 0xff,
+                ip shr 8 and 0xff,
+                ip shr 16 and 0xff,
+                ip shr 24 and 0xff
+            )
+        } catch (_: SecurityException) {
+            ""
+        }
+    }
+
+    private fun getWifiIpv6(): String {
+        try {
+            val interfaces = java.net.NetworkInterface.getNetworkInterfaces() ?: return ""
+            for (intf in interfaces) {
+                if (!intf.name.startsWith("wlan") && !intf.name.startsWith("ap")) continue
+                for (addr in intf.inetAddresses) {
+                    if (addr is java.net.Inet6Address && !addr.isLoopbackAddress && !addr.isLinkLocalAddress) {
+                        return addr.hostAddress?.replace("%.*".toRegex(), "") ?: ""
+                    }
+                }
+            }
+        } catch (_: Exception) {}
+        return ""
     }
 
     companion object {

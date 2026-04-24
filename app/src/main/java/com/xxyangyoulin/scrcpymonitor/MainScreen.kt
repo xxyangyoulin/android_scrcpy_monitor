@@ -1,5 +1,9 @@
 package com.xxyangyoulin.scrcpymonitor
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -48,6 +52,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
@@ -156,39 +161,27 @@ fun MainScreen(
             )
         },
         bottomBar = {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 14.dp),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Box(
+            if (!uiState.rootAvailable) {
+                Row(
                     modifier = Modifier
-                        .size(6.dp)
-                        .clip(CircleShape)
-                        .background(
-                            colorResource(
-                                if (uiState.rootAvailable) {
-                                    R.color.footerDot
-                                } else {
-                                    R.color.statusDisconnected
-                                }
-                            )
-                        )
-                )
-                Spacer(modifier = Modifier.width(6.dp))
-                Text(
-                    text = stringResource(
-                        if (uiState.rootAvailable) {
-                            R.string.status_root_ready
-                        } else {
-                            R.string.status_root_missing
-                        }
-                    ),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 14.dp),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .size(6.dp)
+                            .clip(CircleShape)
+                            .background(colorResource(R.color.statusDisconnected))
+                    )
+                    Spacer(modifier = Modifier.width(6.dp))
+                    Text(
+                        text = stringResource(R.string.status_root_missing),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
             }
         }
     ) { innerPadding ->
@@ -485,7 +478,11 @@ private fun ToolsCard(
                 detailDialogLabel = stringResource(R.string.dialog_wifi_debugging_port_label),
                 detailKeyboardType = KeyboardType.Number,
                 onDetailChange = onWifiDebuggingPortChange,
-                onCheckedChange = onWifiDebuggingChange
+                onCheckedChange = onWifiDebuggingChange,
+                copyableTexts = listOfNotNull(
+                    uiState.wifiIpv4.ifEmpty { null },
+                    uiState.wifiIpv6.ifEmpty { null }
+                )
             )
             DividerSpacer()
             SettingRow(
@@ -570,8 +567,10 @@ private fun SettingRow(
     detailDialogLabel: String?,
     detailKeyboardType: KeyboardType,
     onDetailChange: ((String) -> Unit)?,
-    onCheckedChange: (Boolean) -> Unit
+    onCheckedChange: (Boolean) -> Unit,
+    copyableTexts: List<String> = emptyList()
 ) {
+    val context = LocalContext.current
     val primaryColor = MaterialTheme.colorScheme.primary
     var portDialogVisible by remember { mutableStateOf(false) }
     var detailInput by remember(detailText) { mutableStateOf(detailText.orEmpty()) }
@@ -610,9 +609,50 @@ private fun SettingRow(
                     modifier = Modifier.padding(top = 1.dp)
                 )
             }
-            if (detailText != null && onDetailChange != null) {
+            val hasDetail = detailText != null && onDetailChange != null
+            val hasCopyable = copyableTexts.isNotEmpty()
+            if (hasDetail || hasCopyable) {
+                Row(
+                    modifier = Modifier
+                        .padding(top = if (subtitle.isNotBlank()) 6.dp else 4.dp),
+                    horizontalArrangement = Arrangement.spacedBy(0.dp)
+                ) {
+                    copyableTexts.forEach { ip ->
+                        Text(
+                            text = ip,
+                            style = MaterialTheme.typography.labelSmall,
+                            color = primaryColor,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            modifier = Modifier
+                                .weight(1f, fill = false)
+                                .clip(RoundedCornerShape(8.dp))
+                                .clickable {
+                                    val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                                    clipboard.setPrimaryClip(ClipData.newPlainText("IP", ip))
+                                    Toast.makeText(context, context.getString(R.string.toast_ip_copied, ip), Toast.LENGTH_SHORT).show()
+                                }
+                                .padding(horizontal = 8.dp, vertical = 4.dp)
+                        )
+                    }
+                    if (hasDetail) {
+                        Text(
+                            text = detailText!!,
+                            style = MaterialTheme.typography.labelSmall,
+                            color = primaryColor,
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(8.dp))
+                                .clickable {
+                                    detailInput = detailText
+                                    portDialogVisible = true
+                                }
+                                .padding(horizontal = 8.dp, vertical = 4.dp)
+                        )
+                    }
+                }
+            } else if (hasDetail) {
                 Text(
-                    text = detailText,
+                    text = detailText!!,
                     style = MaterialTheme.typography.labelSmall,
                     color = primaryColor,
                     modifier = Modifier

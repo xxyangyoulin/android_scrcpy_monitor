@@ -20,6 +20,7 @@ class ScrcpyMonitorService : Service() {
     private var pendingForceRefresh = false
     private var uiActive = false
     private var lastSnapshot: ScrcpyStateDetector.Snapshot? = null
+    private var lastWifiStatus: WifiDebuggingManager.Status? = null
     private var idlePollCount = 0
     private var lastWifiAccessControlSyncAt = 0L
     private val pollRunnable = object : Runnable {
@@ -85,11 +86,16 @@ class ScrcpyMonitorService : Service() {
         storeLastConnection(snapshot, previousSnapshot)
         updateIdlePollCount(snapshot.status, previousSnapshot?.status)
         MonitorRuntimeState.update(running = true, snapshot = snapshot)
-        if (forceRefresh || snapshot != previousSnapshot) {
+        val wifiStatus = WifiDebuggingManager.getCachedStatus()
+        val wifiChanged = wifiStatus != lastWifiStatus
+        if (snapshot != previousSnapshot || (forceRefresh && wifiChanged)) {
             DebugLog.d("state changed to ${snapshot.status}, endpoint=${snapshot.endpoint ?: "-"}")
             manager.notify(ONGOING_NOTIFICATION_ID, buildOngoingNotification(this, snapshot))
             notifyStateChanged(snapshot)
             lastSnapshot = snapshot
+            lastWifiStatus = wifiStatus
+        } else if (forceRefresh) {
+            lastWifiStatus = wifiStatus
         }
         return snapshot.status
     }

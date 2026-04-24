@@ -20,5 +20,7 @@ data class MainUiState(
     val disableAnimationsEnabled: Boolean = true,
     val disconnectEnabled: Boolean = false,
     val rootAvailable: Boolean = false,
-    val disableAnimationsSubtitle: String = ""
+    val disableAnimationsSubtitle: String = "",
+    val wifiIpv4: String = "",
+    val wifiIpv6: String = ""
 )

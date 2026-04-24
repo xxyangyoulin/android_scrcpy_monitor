@@ -77,5 +77,6 @@
     <string name="toast_screen_on_disabled">Screen timeout restored</string>
     <string name="toast_screen_on_failed">Unable to change screen timeout</string>
     <string name="value_not_set">Not set</string>
+    <string name="toast_ip_copied">Copied %1$s</string>
     <string name="hint_root_required">This app requires root access.</string>
 </resources>

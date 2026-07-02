@@ -33,6 +33,7 @@ class MainActivity : ComponentActivity() {
     private var ignoreWifiSwitchChanges = false
     private var ignoreAnimationSwitchChanges = false
     private var uiRefreshRunning = false
+    private var connectionRefreshInFlight = false
     private var monitorRunning = false
     private var scrcpyStatus = ScrcpyStateDetector.Status.UNKNOWN
     private var wifiDebuggingPort = MonitorSettings.DEFAULT_WIFI_DEBUGGING_PORT
@@ -221,16 +222,26 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun refreshConnectionState() {
+        if (connectionRefreshInFlight) {
+            return
+        }
+        connectionRefreshInFlight = true
         runInBackground {
-            val snapshot = ScrcpyStateDetector.getSnapshot()
-            val displayEndpoint = EndpointFormatter.format(snapshot.endpoint)
-            val runtimeState = MonitorRuntimeState.update(
-                running = ScrcpyMonitorService.isRunning(this),
-                snapshot = snapshot
-            )
-            runOnUiThread {
-                applyRuntimeState(runtimeState, displayEndpoint)
-                renderState()
+            try {
+                val snapshot = ScrcpyStateDetector.getSnapshot()
+                val displayEndpoint = EndpointFormatter.format(snapshot.endpoint)
+                val runtimeState = MonitorRuntimeState.update(
+                    running = ScrcpyMonitorService.isRunning(this),
+                    snapshot = snapshot
+                )
+                runOnUiThread {
+                    applyRuntimeState(runtimeState, displayEndpoint)
+                    renderState()
+                }
+            } finally {
+                runOnUiThread {
+                    connectionRefreshInFlight = false
+                }
             }
         }
     }

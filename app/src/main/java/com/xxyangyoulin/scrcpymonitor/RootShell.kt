@@ -1,5 +1,7 @@
 package com.xxyangyoulin.scrcpymonitor
 
+import java.util.concurrent.TimeUnit
+
 object RootShell {
     fun isAvailable(): Boolean {
         return succeeded(run("id"))
@@ -14,8 +16,12 @@ object RootShell {
                 writer.write("exit")
                 writer.newLine()
             }
+            if (!process.waitFor(COMMAND_TIMEOUT_SECONDS, TimeUnit.SECONDS)) {
+                process.destroyForcibly()
+                return Result.Failure
+            }
             val output = process.inputStream.bufferedReader().readText().trim()
-            if (process.waitFor() == 0) {
+            if (process.exitValue() == 0) {
                 Result.Success(output)
             } else {
                 Result.Failure
@@ -41,4 +47,6 @@ object RootShell {
     fun outputOrNull(result: Result): String? {
         return (result as? Result.Success)?.output
     }
+
+    private const val COMMAND_TIMEOUT_SECONDS = 5L
 }

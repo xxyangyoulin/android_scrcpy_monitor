@@ -234,7 +234,7 @@ class ScrcpyMonitorService : Service() {
         private const val ONGOING_CHANNEL_ID = "scrcpy_monitor_ongoing"
         private const val ONGOING_NOTIFICATION_ID = 1001
         private const val UI_POLL_INTERVAL_MS = 1_000L
-        private const val CONNECTED_POLL_INTERVAL_MS = 4_000L
+        private const val CONNECTED_POLL_INTERVAL_MS = 1_000L
         private const val RECENT_IDLE_POLL_INTERVAL_MS = 5_000L
         private const val IDLE_POLL_INTERVAL_MS = 15_000L
         private const val IDLE_POLL_FAST_WINDOW_COUNT = 6
